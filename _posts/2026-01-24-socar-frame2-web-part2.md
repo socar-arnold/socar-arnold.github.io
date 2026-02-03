@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카프레임 2.0, 기술로 굴리기(웹)"
 subtitle: 아키텍처·번들·LLM 활용 기록
-date: 2026-01-24 00:00:00 +0900
+date: 2026-01-23 00:00:00 +0900
 category: fe
 background: "/img/2026-01-23-socar-frame2-web/logo.png"
 author: arnold
