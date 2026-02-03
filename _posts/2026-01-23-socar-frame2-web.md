@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "쏘카 디자인 시스템 2.0: 라이브러리를 넘어 시스템으로(웹)"
-subtitle: 라이브러리를 넘어 시스템으로
+subtitle: 웹 UI 라이브러리에서 시스템으로 확장한 여정
 date: 2026-01-23 00:00:00 +0900
 category: fe
 background: "/img/2026-01-23-socar-frame2-web/logo.png"
