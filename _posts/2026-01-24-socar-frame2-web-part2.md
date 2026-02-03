@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "쏘카프레임 2.0, 기술로 굴리기(웹)"
+title: "쏘카 디자인 시스템 개발기 2편: 기술로 굴리기(웹)"
 subtitle: 아키텍처·번들·LLM 활용 기록
-date: 2026-01-23 00:00:00 +0900
+date: 2026-01-24 00:00:00 +0900
 category: fe
 background: "/img/2026-01-23-socar-frame2-web/logo.png"
 author: arnold
@@ -79,56 +79,56 @@ export const resolveTargetY = ({
   state,
   tip,
 }: {
-  half: number
-  max: number
-  state: BottomSheetState
-  tip: number
+  half: number;
+  max: number;
+  state: BottomSheetState;
+  tip: number;
 }) => {
   switch (state) {
-    case 'max':
-      return window.innerHeight - max
-    case 'tip':
-      return window.innerHeight - tip
-    case 'half':
-      return window.innerHeight - half
-    case 'hidden':
+    case "max":
+      return window.innerHeight - max;
+    case "tip":
+      return window.innerHeight - tip;
+    case "half":
+      return window.innerHeight - half;
+    case "hidden":
     default:
-      return window.innerHeight
+      return window.innerHeight;
   }
-}
-  // 생략..
+};
+// 생략..
 
-  //이 상태를 활용하여 animate를 시키는 메서드
-  const animateToState = (state: BottomSheetState) => {
-    const normalized = normalizeState(state)
-    const targetY = resolveTargetY({
-      half,
-      max,
-      state: normalized,
-      tip,
-    })
-    animate(bottomSheetY, targetY, SPRING_TRANSITION)
+//이 상태를 활용하여 animate를 시키는 메서드
+const animateToState = (state: BottomSheetState) => {
+  const normalized = normalizeState(state);
+  const targetY = resolveTargetY({
+    half,
+    max,
+    state: normalized,
+    tip,
+  });
+  animate(bottomSheetY, targetY, SPRING_TRANSITION);
+};
+// 생략..
+
+// 기타 복잡한 제어들이 상태에 연결될 수 밖에 없는 형태
+const setState = (next: BottomSheetState) => {
+  const normalizedNext = normalizeState(next);
+  const current = activeStateRef.current;
+  if (current === normalizedNext) {
+    animateToState(normalizedNext);
+    return;
   }
-  // 생략..
 
-  // 기타 복잡한 제어들이 상태에 연결될 수 밖에 없는 형태
-  const setState = (next: BottomSheetState) => {
-    const normalizedNext = normalizeState(next)
-    const current = activeStateRef.current
-    if (current === normalizedNext) {
-      animateToState(normalizedNext)
-      return
-    }
+  activeStateRef.current = normalizedNext;
 
-    activeStateRef.current = normalizedNext
-
-    if (!isControlled) {
-      setInternalState(normalizedNext)
-    }
-
-    animateToState(normalizedNext)
-    onStateChange?.(normalizedNext)
+  if (!isControlled) {
+    setInternalState(normalizedNext);
   }
+
+  animateToState(normalizedNext);
+  onStateChange?.(normalizedNext);
+};
 ```
 
 더 많은 요구사항이 있을 경우 상태머신이나 아래 다른 예제와 같이 별도 객체로 분리하는 것을 고려해볼 수 있었으나, 현재 단계에서는 Hook으로 충분하다고 보았고 이미 서비스들에서 요구하는 많은 케이스들을 감당할 만한 정책이라고 결론냈습니다.
@@ -501,7 +501,7 @@ AI를 실무에 쓰려면 “문서가 있다” 수준을 넘어 UI 라이브�
 즉, 디자이너가 그린 결과물을 개발자가 에디터 안에서 바로 코드로 확인하거나 수정하는 방식으로 연결될 수 있습니다. 다만 이 과정에서 결과 품질은 Instructions와 Figma 설계 방식에 매우 민감하다는 걸 확인했습니다.
 같은 디자인이라도 Instructions에 어떤 지시가 들어가 있는지, Figma 안에서 슬롯/상태가 어떻게 정의되어 있는지, hidden 노드가 어떤 방식으로 처리되어 있는지에 따라 결과가 크게 달라졌습니다.
 
-| Instructions 개선 전 결과                                   | Instructions 개선 후 결과                                     |
+| Instructions 개선 전 결과                                  | Instructions 개선 후 결과                                    |
 | ---------------------------------------------------------- | ------------------------------------------------------------ |
 | ![ui-first](/img/2026-01-23-socar-frame2-web/ui-first.png) | ![ui-second](/img/2026-01-23-socar-frame2-web/ui-second.png) |
 
