@@ -2,9 +2,9 @@
 layout: post
 title: "쏘카 디자인 시스템 2.0 개발기 1편: 시스템으로 굴리기(웹)"
 subtitle: 설계·연동·운영으로 만드는 디자인 시스템
-date: 2026-01-23 00:00:00 +0900
+date: 2026-02-24 00:00:00 +0900
 category: fe
-background: "/img/2026-01-23-socar-frame2-web/logo.png"
+background: "/img/2026-02-24-socar-frame2-web/logo.png"
 author: arnold
 comments: true
 tags:
@@ -80,7 +80,7 @@ UI 라이브러리 위에 **정책(규칙), 연동(디자인-코드), 운영(릴
 
 아래는 전체 업무 흐름을 기반으로 시스템을 통한 `연동체계` 강화 목표 지점을 나타낸 다이어그램입니다.
 
-![설계결과](/img/2026-01-23-socar-frame2-web/architect-target.png)
+![설계결과](/img/2026-02-24-socar-frame2-web/architect-target.png)
 
 ## 2.2 Figma Plugin
 
@@ -88,16 +88,16 @@ UI 라이브러리 위에 **정책(규칙), 연동(디자인-코드), 운영(릴
 
 구상은 아래 그림과 같았고 이를 위해 [Figma Plugin](https://www.figma.com/developers/plugins)을 활용했습니다.
 
-![Figma Plugin을 통한 에셋 배포 자동화 흐름도](/img/2026-01-23-socar-frame2-web/socar-frame2.png)
+![Figma Plugin을 통한 에셋 배포 자동화 흐름도](/img/2026-02-24-socar-frame2-web/socar-frame2.png)
 
 기존에는 아이콘·스페이싱 토큰이 슬랙 → 담당 개발자 수동 PR(Pull Request) 생성 → 검증 → 배포로 이어져 리드타임이 길었고 이를 줄이기 위해 Figma 내부 플러그인을 도입해 디자이너가 바로 PR을 생성하도록 했습니다.
 현재는 PAT(Personal Access Token) 기반으로 인증을 처리합니다.
 
 운영상 보안·권한 문제는 남아 있어, 별도 인증 서버 도입을 후속 과제로 검토 중입니다.
 
-![Figma 내 아이콘 PR 생성 플러그인 UI](/img/2026-01-23-socar-frame2-web/figma-plugin.png)
+![Figma 내 아이콘 PR 생성 플러그인 UI](/img/2026-02-24-socar-frame2-web/figma-plugin.png)
 
-![생성된 아이콘 PR 예시](/img/2026-01-23-socar-frame2-web/icon-pr.png)
+![생성된 아이콘 PR 예시](/img/2026-02-24-socar-frame2-web/icon-pr.png)
 
 이 외에도 토큰과 같은 foundation 레벨의 요소가 추가될 때는 위와 같은 프로세스를 확장시켜 활용할 수 있을 것으로 보고 있습니다.
 
@@ -109,11 +109,11 @@ UI 라이브러리 위에 **정책(규칙), 연동(디자인-코드), 운영(릴
 이후 라이브러리를 포함한 레포지토리 내에서 코드를 확인해 실제 서비스에 구현하는 방식이었습니다.
 하지만 [Figma Code Connect](https://www.figma.com/developers/api#code-connect)를 잘 활용한다면 이 과정을 간소화할 수 있게 됩니다.
 
-![Figma Code Connect 적용 시 노출되는 코드](/img/2026-01-23-socar-frame2-web/figma-code-connect-code.png)
+![Figma Code Connect 적용 시 노출되는 코드](/img/2026-02-24-socar-frame2-web/figma-code-connect-code.png)
 
 Figma Code Connect를 적용하면 디자이너가 선택한 노드에 대해 대응되는 UI 라이브러리 코드가 즉시 노출돼 사용 흐름이 단축됩니다.
 
-![Figma에서 컴포넌트 선택 시 연결된 코드 확인](/img/2026-01-23-socar-frame2-web/figma-code-connect.png)
+![Figma에서 컴포넌트 선택 시 연결된 코드 확인](/img/2026-02-24-socar-frame2-web/figma-code-connect.png)
 
 사진과 같이 특정 UI를 클릭하면 그에 맞는 UI 라이브러리 코드가 나타나게 됩니다.
 
@@ -133,14 +133,14 @@ Figma Code Connect를 적용하면 디자이너가 선택한 노드에 대해 �
 특정 Slot 안에 정의된 children이 자유롭게 들어갈 수 있도록 개선한 예시로 설명해보겠습니다
 
 아래 사진은 Figma 내에서 하위 UI들이 Main Component로 정의되어 있습니다.
-![DatePicker의 Main Component 구성](/img/2026-01-23-socar-frame2-web/datepicker-figma.png)
+![DatePicker의 Main Component 구성](/img/2026-02-24-socar-frame2-web/datepicker-figma.png)
 
 아래 보라색 텍스트는 Main Component로 정의된 컴포넌트를 Slot 형태의 children에 넣은 예시입니다. 이를 통해 다른 Main Component 내에서 유연하게 연결할 수 있습니다.
 
-![Slot 구조로 연결된 DatePicker 구성](/img/2026-01-23-socar-frame2-web/datepicker-figma-slot.png)
+![Slot 구조로 연결된 DatePicker 구성](/img/2026-02-24-socar-frame2-web/datepicker-figma-slot.png)
 
 위 형태를 기반으로 Code Connect를 할 수 있게 되었습니다.
-![Slot 구조에 매핑된 코드 예시](/img/2026-01-23-socar-frame2-web/datepicker-figma-slot-code.png)
+![Slot 구조에 매핑된 코드 예시](/img/2026-02-24-socar-frame2-web/datepicker-figma-slot-code.png)
 
 결과적으로 합성 컴포넌트 형태와 Figma 설계 형태가 더 유사해졌습니다.
 

@@ -2,9 +2,9 @@
 layout: post
 title: "쏘카 디자인 시스템 2.0 개발기 2편: 기술로 굴리기(웹)"
 subtitle: 아키텍처·번들·LLM 활용 기록
-date: 2026-01-24 00:00:00 +0900
+date: 2026-02-25 00:00:00 +0900
 category: fe
-background: "/img/2026-01-23-socar-frame2-web/logo.png"
+background: "/img/2026-02-24-socar-frame2-web/logo.png"
 author: arnold
 comments: true
 tags:
@@ -74,7 +74,7 @@ UI/UX 정책과 비즈니스 로직을 분리하지 않으면, 동일 정책의 
 
 UI와 상태가 강하게 엮이는 대표 사례가 BottomSheet와 Accordion입니다.
 
-![BottomSheet 컴포넌트의 상태별 UI](/img/2026-01-23-socar-frame2-web/bottomsheet-ui.png)
+![BottomSheet 컴포넌트의 상태별 UI](/img/2026-02-24-socar-frame2-web/bottomsheet-ui.png)
 
 BottomSheet는 `드래그/스냅 포인트/바운드/스크롤 잠금` 같은 상호작용이 UI와 분리되기 어렵고, 상태 전이가 곧 UI 애니메이션이라 Hook 중심 구조가 자연스럽다고 봤습니다.
 
@@ -144,19 +144,19 @@ const setState = (next: BottomSheetState) => {
 
 더 많은 요구사항이 있을 경우 상태머신이나 아래 다른 예제와 같이 별도 객체로 분리하는 것을 고려해볼 수 있었으나, 현재 단계에서는 Hook으로 충분하다고 보았고 이미 서비스들에서 요구하는 많은 케이스들을 감당할 만한 정책이라고 결론냈습니다.
 
-![BottomSheet Hook 구성 흐름](/img/2026-01-23-socar-frame2-web/bottomsheet-hooks.png)
+![BottomSheet Hook 구성 흐름](/img/2026-02-24-socar-frame2-web/bottomsheet-hooks.png)
 
 전체 구조는 사진과 같이 `useBottomSheet.tsx`에서 다양한 Hook을 orchestration하여 활용하였습니다.
 
 반대로 DatePicker나 Pattern(Carousel)은 UI보다 정책 로직이 훨씬 복잡하다고 봤습니다.
 
-![DatePicker 사용자 노출 UI](/img/2026-01-23-socar-frame2-web/datepicker-ui.png)
+![DatePicker 사용자 노출 UI](/img/2026-02-24-socar-frame2-web/datepicker-ui.png)
 
 예를 들어 DatePicker는 사용자에게는 start/end 선택 UI만 보입니다. 하지만 내부적으로는 날짜 계산, 라벨 처리, 비활성 정책 등 UI와 직접 연결되지 않는 로직이 많았습니다.
 
 그래서 이런 로직은 아래와 같이 객체로 분리하였습니다.
 
-![DatePicker의 로직 분리 아키텍처](/img/2026-01-23-socar-frame2-web/datepicker-architecture.png)
+![DatePicker의 로직 분리 아키텍처](/img/2026-02-24-socar-frame2-web/datepicker-architecture.png)
 
 ```ts
 // core/DateManager.ts
@@ -465,7 +465,7 @@ export default defineConfig([
 
 결과는 아래와 같이 유의미한 성과를 가져왔습니다.
 
-![트리쉐이킹 적용 전후 번들 사이즈 비교](/img/2026-01-23-socar-frame2-web/tree-shake.png)
+![트리쉐이킹 적용 전후 번들 사이즈 비교](/img/2026-02-24-socar-frame2-web/tree-shake.png)
 
 - 공통 static/chunk의 용량을 **1.45mb → 567.07kb** 로 **약 61%의 감소**
 - first load js는 **373kb → 248kb**로 **33%의 청크 번들 감소**
@@ -493,14 +493,14 @@ AI를 실무에 쓰려면 “문서가 있다” 수준을 넘어 UI 라이브�
 
 이 작업은 1편에서 언급한 말한 `디자이너 → 개발자(라이브러리) → 개발자(서비스)` 흐름에서 중간 커뮤니케이션 비용을 줄이기 위한 핵심 축이라고 봤습니다.
 
-![AGENTS.md 템플릿 예시](/img/2026-01-23-socar-frame2-web/agent-template.png)
+![AGENTS.md 템플릿 예시](/img/2026-02-24-socar-frame2-web/agent-template.png)
 
 디자이너 의도 파악 비용, 개발자 간 UI 정책 확인 비용, PM의 정책 검증 비용을 줄이려면 사전에 합의된 규칙이 문서로 고정되어야 했습니다.
 
 합의된 UI/UX규칙을 명세로 정리해 활용한 뒤, AI로 테스트 코드를 작성하는 과정이 훨씬 수월해지는 걸 경험했습니다.
 그 과정에서 규칙의 중요성을 한층 더 체감했습니다.
 
-![사내 AGENTS.md 운영 사례](/img/2026-01-23-socar-frame2-web/agent.png)
+![사내 AGENTS.md 운영 사례](/img/2026-02-24-socar-frame2-web/agent.png)
 
 그래서 UI 라이브러리를 “단순 라이브러리”가 아니라 시스템으로 작동하게 만들기 위한 기반 문서로 `llms.txt`와 `AGENTS.md`를 함께 운영하게 되었습니다.
 
@@ -513,7 +513,7 @@ AI를 실무에 쓰려면 “문서가 있다” 수준을 넘어 UI 라이브�
 
 | Instructions 개선 전 결과                                  | Instructions 개선 후 결과                                    |
 | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| ![ui-first](/img/2026-01-23-socar-frame2-web/ui-first.png) | ![ui-second](/img/2026-01-23-socar-frame2-web/ui-second.png) |
+| ![ui-first](/img/2026-02-24-socar-frame2-web/ui-first.png) | ![ui-second](/img/2026-02-24-socar-frame2-web/ui-second.png) |
 
 Instructions를 개선한 뒤, 리뷰에서 반복되던 결점(토큰/슬롯/예외 처리)이 크게 줄고 일관성을 갖게 됐습니다. 그래서 이 부분은 단발성으로 끝나는 작업이 아니라, 사례를 계속 쌓고 Instructions와 Figma 설계 규칙을 지속적으로 보완해 나가야 하는 영역이라고 봤습니다.
 
